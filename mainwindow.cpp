@@ -17,7 +17,11 @@ MainWindow::MainWindow(QWidget *parent) :
     string *target_host = new string("www.google.com");
     string *hostname = nu->getHostName();
     std::cout<<"hostname : "<<hostname->c_str()<<std::endl;
-    nu->getHostByName(target_host);
+    list<string> host_addr = nu->getHostByName(target_host);
+    ;
+    for(list<string>::iterator i=host_addr.begin();i!=host_addr.end();i++){
+        std::cout<<"addr : "<<(*i).c_str()<<std::endl;
+    }
     std::flush(std::cout);
 
     ui->setupUi(this);

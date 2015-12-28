@@ -36,34 +36,36 @@ string* network_utils::getHostName()
     return hostname;
 }
 
-string *network_utils::getHostByName(string *name)
+
+//A host could have many address, so we need to return a address list
+list<string> network_utils::getHostByName(string *name)
 {
     struct hostent *hostent_p;
     struct in_addr addr;
-
+    list<string> addr_list;
 
     hostent_p = gethostbyname(name->c_str());
     if(hostent_p == NULL){
         cout<<"hostent is NULL err: "<<WSAGetLastError()<<endl;
-        return NULL;
+        return addr_list;
     }
     cout<<"hostname is "<<hostent_p->h_name<<endl;
 
     if(hostent_p->h_aliases != NULL){
         char **alist;
         for(alist=hostent_p->h_aliases;*alist != NULL;alist++){
-            cout<<"alieases: "<<*alist<<endl;
+            //cout<<"alieases: "<<*alist<<endl;
         }
     }
     if(hostent_p->h_addr_list!=NULL){
         char **alist;
         for(alist=hostent_p->h_addr_list;*alist!=NULL;alist++){
             memcpy(&addr.S_un.S_addr,*alist,hostent_p->h_length);
-            cout<<"addr: "<<inet_ntoa(addr)<<endl;
+            addr_list.push_back(string(inet_ntoa(addr)));
+            //cout<<"addr: "<<inet_ntoa(addr)<<endl;
         }
     }
-    string *hostAddress = new string(inet_ntoa(addr));
-    flush(cout);
 
-    return hostAddress;
+    flush(cout);
+    return addr_list;
 }
