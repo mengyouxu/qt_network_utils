@@ -12,19 +12,17 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    //Test network_utils here
-    class network_utils *nu = new network_utils();
-    string *target_host = new string("www.google.com");
-    string *hostname = nu->getHostName();
-    std::cout<<"hostname : "<<hostname->c_str()<<std::endl;
+    ui->setupUi(this);
+
+    //init network_utils here
+    nu = new network_utils();
+    string *target_host = new string("www.baidu.com");
     list<string> host_addr = nu->getHostByName(target_host);
-    ;
+    nu->pingHost(target_host);
     for(list<string>::iterator i=host_addr.begin();i!=host_addr.end();i++){
         std::cout<<"addr : "<<(*i).c_str()<<std::endl;
     }
     std::flush(std::cout);
-
-    ui->setupUi(this);
 }
 
 MainWindow::~MainWindow()
@@ -52,3 +50,9 @@ void MainWindow::on_pushButton_clicked()
     QMessageBox::information(this,tr("Detail"),detail);
 }
 
+
+void MainWindow::on_pushButtonGetHostname_clicked()
+{
+    string *hostname = nu->getHostName();
+    ui->labelHostname->setText(hostname->c_str());
+}

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -18,8 +19,13 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_pushButtonGetHostname_clicked();
+
 private:
     Ui::MainWindow *ui;
+
+    class network_utils *nu;
+
 };
 
 #endif // MAINWINDOW_H
