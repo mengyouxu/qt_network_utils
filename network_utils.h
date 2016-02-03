@@ -54,9 +54,13 @@ class network_utils
 public:
     network_utils();
     ~network_utils();
+    void printDebugInfo(bool print){print_debug_info = print;};
     string* getHostName();
-    list<string> getHostByName(string *name);
+    bool isIPv4Addr(string *addr);
+    bool isIPv6Addr(string *addr);
 
+    list<string> getHostByName(string *name);
+    list<string> getRoute(string *name);
     /* Param: name -> host name or address
      *        times -> how many times try to ping
      *
@@ -64,6 +68,7 @@ public:
      */
     float pingHost(string *name,int times=4,int timeout=2000,int ttl=20);
 private:
+    bool print_debug_info;
     unsigned short checksum(unsigned short *buffer, int size);
 };
 
