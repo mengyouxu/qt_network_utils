@@ -55,7 +55,7 @@ public:
     network_utils();
     ~network_utils();
     void printDebugInfo(bool print){print_debug_info = print;};
-    string* getHostName();
+    string getHostName();
     bool isIPv4Addr(string *addr);
     bool isIPv6Addr(string *addr);
 

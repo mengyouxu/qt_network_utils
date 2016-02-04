@@ -51,7 +51,8 @@ string* network_utils::getHostName()
         std::cerr<<"gethostname ret "<<ret_val<<", WSAGetLastError: "<<WSAGetLastError()<<endl;
         return NULL;
     }
-    string *hostname = new string(name);
+    string hostname;
+    hostname.assign(name);
     flush(cout);
 
     return hostname;
