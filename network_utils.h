@@ -67,9 +67,11 @@ public:
      * return percentage of lost packet, return 0 means the host is available
      */
     float pingHost(string *name,int times=4,int timeout=2000,int ttl=20);
+    static unsigned short checksum(unsigned short *buffer, int size);
+    static bool isHWBigEndian(){unsigned short i = 0x100; return (bool)((unsigned char*)&i)[1];};
 private:
     bool print_debug_info;
-    unsigned short checksum(unsigned short *buffer, int size);
+
 };
 
 #endif // NETWORK_UTILS_H

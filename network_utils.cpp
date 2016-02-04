@@ -331,9 +331,13 @@ unsigned short network_utils::checksum(unsigned short *buff, int size)
         size -= sizeof(unsigned short);
     }
 
-    if(size)
+    if(size==1)
     {
-        cksum += *(unsigned char*)buff;
+        if(isHWBigEndian()){
+            cksum += *(unsigned char*)buff<<8;
+        }else{
+            cksum += *(unsigned char*)buff;
+        }
     }
 
     cksum = (cksum >> 16) + (cksum & 0xffff);
