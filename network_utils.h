@@ -9,7 +9,8 @@ using namespace std;
 struct align_test{
 
 };
-struct _icmp_header{ // size 12 bytes
+typedef struct _icmp_header  // size 12 bytes
+{
     unsigned int type:8;
     unsigned int code:8;
     unsigned int checksum:16;
@@ -17,14 +18,15 @@ struct _icmp_header{ // size 12 bytes
     unsigned int id:16;
     unsigned int seq_num:16;
     unsigned int timestamp;
-};
-typedef struct _icmp_header ICMP_HEADER;
+}ICMP_HEADER;
 
-
-struct _ip_header{ // size 20 bytes
-    union{
+typedef struct _ip_header  // size 20 bytes
+{
+    union
+    {
         char header_data[20];
-        struct {
+        struct
+        {
             unsigned int version:4;
             unsigned int ihl:4;
             unsigned int dscp:6;
@@ -45,10 +47,16 @@ struct _ip_header{ // size 20 bytes
             unsigned int dest_addr;
         };
     };
-};
-typedef struct _ip_header IP_HEADER;
+}IP_HEADER;
 
-
+typedef struct _dns_header{ // 12 bytes
+    unsigned short id;
+    unsigned short flags;
+    unsigned short question_count;
+    unsigned short anwser_record_count;
+    unsigned short authority_record_count;
+    unsigned short additional_record_count;
+}DNS_HEADER;
 class network_utils
 {
 public:
@@ -59,6 +67,7 @@ public:
     bool isIPv4Addr(string *addr);
     bool isIPv6Addr(string *addr);
 
+    int dnsPacketFactory(unsigned char* data,int size,string *hostname);
     list<string> getHostByName(string *name);
     list<string> getRoute(string *name);
     /* Param: name -> host name or address

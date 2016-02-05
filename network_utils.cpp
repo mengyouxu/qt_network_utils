@@ -57,8 +57,57 @@ string* network_utils::getHostName()
 
     return hostname;
 }
+int network_utils::dnsPacketFactory(unsigned char* data,int size,string *hostname){
+    DNS_HEADER header;
+    header.id=GetCurrentProcessId();
 
+    header.flags = 0x00;
+    header.question_count = 1;
+    header.anwser_record_count = 0;
+    header.authority_record_count = 0;
+    header.additional_record_count = 0;
 
+    unsigned char question_data[hostname->size()+2] = {'\0'};
+
+    int endPos = hostname->find(".");
+    int offset = endPos + 1;
+    string substring = hostname->substr(0,endPos);
+    cout<<"substring = "<<substring.c_str()<<endl;
+    cout<<"endPos = "<<endPos<<endl;
+    cout<<"offset = "<<offset<<endl;
+    for(int i = 0;;){
+
+        question_data[i]=(unsigned char)substring.size();
+        i++;
+        memcpy(&question_data[i],substring.data(),substring.size());
+        i+=substring.size();
+        if(offset>=hostname->size()){
+                question_data[i] = 0;
+                break;
+        }
+
+        substring = hostname->substr(offset,hostname->size());
+        cout<<"substring = "<<substring.c_str()<<endl;
+        endPos = substring.find(".");
+        cout<<"endPos = "<<endPos<<endl;
+        if(endPos<=0){
+            endPos = substring.size() - 1;
+        }else{
+            substring = substring.substr(0,endPos);
+        }
+        cout<<"substring = "<<substring.c_str()<<endl;
+        offset = offset + endPos +1;
+        cout<<"offset = "<<offset<<endl;
+    }
+
+    if(size < sizeof(DNS_HEADER) + sizeof(question_data)){
+        return 0;
+    }
+    memcpy(data,&header,sizeof(DNS_HEADER));
+    memcpy(data+sizeof(DNS_HEADER),question_data,sizeof(question_data));
+
+    return sizeof(DNS_HEADER) + sizeof(question_data);
+}
 //A host could have many address, so we need to return a address list
 list<string> network_utils::getHostByName(string *name)
 {
